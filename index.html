@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Link Detector</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #browser {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #toolbar {
+            display: flex;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        button {
+            margin-right: 10px;
+        }
+
+        #urlInput {
+            flex: 1;
+        }
+
+        #content {
+            flex: 1;
+            border: none;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .phishing {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+ <form method="POST">
+
+    <div id="browser">
+        <div id="toolbar">
+            <button onclick="goBack()">Back</button>
+            <button onclick="goForward()">Forward</button>
+            <input type="text" id="urlInput" placeholder="Enter URL">
+            <button onclick="checkPhishing()">Check Phishing</button>
+        </div>
+        <iframe id="content" src="about:blank"></iframe>
+        <div id="result"></div>
+    </div>
+ </form>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function goBack() {
+            document.getElementById("content").contentWindow.history.back();
+        }
+
+        function goForward() {
+            document.getElementById("content").contentWindow.history.forward();
+        }
+
+        function checkPhishing() {
+            var url = document.getElementById("urlInput").value;
+
+            // Call the Flask backend to check if the link is phishing
+            // Example: You might use jQuery to send a GET request to your Flask server
+            $.get(`/check-phishing?url=${encodeURIComponent(url)}`, function(data) {
+                if (data.isPhishing) {
+                    showPhishingWarning();
+                } else {
+                    redirectToUrl(url);
+                }
+            });
+        }
+
+        function showPhishingWarning() {
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "Warning! This link is identified as phishing. It is not safe to proceed.";
+            resultDiv.classList.add("phishing");
+        }
+
+        function redirectToUrl(url) {
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";  // Clear previous result
+            resultDiv.classList.remove("phishing");
+
+            document.getElementById("content").src = url;
+        }
+    </script>
+</body>
+</html>
