@@ -14,7 +14,7 @@ def check_link():
 
     if "safe" in result:
         answer = messagebox.askquestion("Confirmation",
-                                        f"The URL seems safe.\nResult: {result}\nDo you want to continue to {url}?")
+                                        f"\nResult: {result}\nDo you want to continue to {url}?")
         if answer == 'yes':
             webbrowser.open_new_tab(url)
     else:

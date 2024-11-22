@@ -12,6 +12,7 @@ import urllib.parse
 import whois
 from datetime import date
 import ipaddress
+import sklearn
 class FeatureExtraction:
         def __init__(self, url):
             self.url = url
@@ -468,7 +469,7 @@ class FeatureExtraction:
 
 
 
-gbc = joblib.load("trained.joblib")
+gbc = joblib.load("gradient_boosting_model.joblib")
 
 def test_phishing_url(url_to_test):
     obj = FeatureExtraction(url_to_test)
